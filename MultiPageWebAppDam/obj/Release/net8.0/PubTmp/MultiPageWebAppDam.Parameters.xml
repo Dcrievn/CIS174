@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="MultiPageWebAppDam20240125145345" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Eric\\source\\repos\\CIS\ 174\ Advanced\ C\#\ assignments\\Module\ 2\ Assignments\\MultiPageWebAppDam\\obj\\Release\\net8\.0\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>
