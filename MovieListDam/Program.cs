@@ -26,7 +26,6 @@ namespace MovieListDam
                 app.UseHsts();
             }
 
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
