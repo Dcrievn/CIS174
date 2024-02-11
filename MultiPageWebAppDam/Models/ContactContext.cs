@@ -4,8 +4,7 @@ namespace MultiPageWebAppDam.Models
 {
     public class ContactContext : DbContext
     {
-        public ContactContext(DbContextOptions<ContactContext> options)
-        : base(options)
+        public ContactContext(DbContextOptions<ContactContext> options) : base(options)
         { }
         public DbSet<ContactInfo> Contacts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

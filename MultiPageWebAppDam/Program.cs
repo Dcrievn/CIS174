@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using MultiPageWebAppDam.Models;
 
 namespace MultiPageWebAppDam
@@ -24,7 +25,6 @@ namespace MultiPageWebAppDam
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -32,9 +32,18 @@ namespace MultiPageWebAppDam
 
             app.UseAuthorization();
 
+            app.MapAreaControllerRoute(
+                name: "admin",
+                areaName: "Admin",
+                pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "Static",
+                pattern: "{controller=Home}/{action}/Page/{num}");
+            ;
 
             app.Run();
         }
