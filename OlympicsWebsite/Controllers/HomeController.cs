@@ -22,6 +22,27 @@ namespace OlympicsWebsite.Controllers
                 Games = context.Games.ToList(),
                 Sports = context.Sports.ToList()
             };
+
+            var session = new OlympicSession(HttpContext.Session);
+            session.SetActiveGame(activeGame);
+            session.SetActiveSport(activeSportType);
+
+            // if no count in session, get cookie and restore fave teams in session
+            int? count = session.GetMyCountryCount();
+            if (count == null)
+            {
+                var cookies = new OlympicCookies(Request.Cookies);
+                string[] ids = cookies.GetMyCountryIds();
+                List<Country> mycountries = new List<Country>();
+                if (ids.Length > 0)
+                {
+                    mycountries = context.Countries.Include(c => c.Game)
+                    .Include(c => c.Sport)
+                    .Where(t => ids.Contains(t.CountryID)).ToList();
+                }
+                session.SetMyCountries(mycountries);
+            }
+
             IQueryable<Country> query = context.Countries;
             if (activeGame != "all")
                 query = query.Where(c => c.Game.GameID.ToLower() == activeGame.ToLower());
@@ -43,13 +64,37 @@ namespace OlympicsWebsite.Controllers
         [HttpGet]
         public ViewResult Details(string id)
         {
+            var session = new OlympicSession(HttpContext.Session);
             var model = new CountryViewModel
             {
-                Country = context.Countries.Include(c => c.Sport).Include(c => c.Game).FirstOrDefault(c => c.CountryID == id),
-                ActiveGame = TempData?["ActiveGame"]?.ToString() ?? "all",
-                ActiveSportType = TempData?["ActiveSportType"]?.ToString() ?? "all"
+                Country = context.Countries
+            .Include(c => c.Game)
+            .Include(c => c.Sport)
+            .FirstOrDefault(c => c.CountryID == id),
+                ActiveGame = session.GetActiveGame(),
+                ActiveSportType = session.GetActiveSport()
             };
             return View(model);
+        }
+        [HttpPost]
+        public RedirectToActionResult Add(CountryViewModel model)
+        {
+            model.Country = context.Countries
+            .Include(c => c.Game)
+            .Include(c => c.Sport)
+            .Where(c => c.CountryID == model.Country.CountryID)
+            .FirstOrDefault();
+            var session = new OlympicSession(HttpContext.Session);
+            var countries = session.GetMyCountries();
+            countries.Add(model.Country);
+            session.SetMyCountries(countries);
+            TempData["message"] = $"{model.Country.Name} added to your favorites";
+            return RedirectToAction("Index",
+            new
+            {
+                ActiveGame = session.GetActiveGame(),
+                ActiveSport = session.GetActiveSport()
+            });
         }
     }
 }

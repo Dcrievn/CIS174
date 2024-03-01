@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\Damer\source\repos\CIS 174 Advanced C# assignments\OlympicsWebsite
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/Damer/source/repos/CIS 174 Advanced C\# assignments/OlympicsWebsite/Views/Favorites/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmF2b3JpdGVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Damer/source/repos/CIS 174 Advanced C\# assignments/OlympicsWebsite/Views/Home/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

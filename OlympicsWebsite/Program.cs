@@ -3,6 +3,9 @@ using OlympicsWebsite.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -26,12 +29,17 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
+app.UseSession();
+
+app.UseEndpoints(endpoints => 
+{
+    app.MapControllerRoute(
     name: "custom",
     pattern: "{controller}/{action}/olympicgame/{ActiveGame}/category/{ActiveSportType}");
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
 app.Run();
