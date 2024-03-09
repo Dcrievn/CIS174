@@ -34,8 +34,8 @@ app.UseSession();
 app.UseEndpoints(endpoints => 
 {
     app.MapControllerRoute(
-    name: "custom",
-    pattern: "{controller}/{action}/olympicgame/{ActiveGame}/category/{ActiveSportType}");
+        name: "custom",
+        pattern: "{controller=Home}/{action=Index}/olympicgame/{activeGame}/category/{activeSportType}");
 
     app.MapControllerRoute(
         name: "default",

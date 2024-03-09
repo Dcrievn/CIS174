@@ -13,19 +13,11 @@ namespace OlympicsWebsite.Controllers
         {
             context = ctx;
         }
-        public ViewResult Index(string activeGame = "all", string activeSportType = "all")
+        public IActionResult Index(CountryListViewModel model)
         {
-            var model = new CountryListViewModel
-            {
-                ActiveGame = activeGame,
-                ActiveSportType = activeSportType,
-                Games = context.Games.ToList(),
-                Sports = context.Sports.ToList()
-            };
-
             var session = new OlympicSession(HttpContext.Session);
-            session.SetActiveGame(activeGame);
-            session.SetActiveSport(activeSportType);
+            session.SetActiveGame(model.ActiveGame);
+            session.SetActiveSport(model.ActiveSportType);
 
             // if no count in session, get cookie and restore fave teams in session
             int? count = session.GetMyCountryCount();
@@ -43,16 +35,60 @@ namespace OlympicsWebsite.Controllers
                 session.SetMyCountries(mycountries);
             }
 
+            model.Games = context.Games.ToList();
+            model.Sports = context.Sports.ToList();
+
             IQueryable<Country> query = context.Countries;
-            if (activeGame != "all")
-                query = query.Where(c => c.Game.GameID.ToLower() == activeGame.ToLower());
-            if (activeSportType != "all")
-                query = query.Where(c => c.Sport.SportID.ToLower() == activeSportType.ToLower());
+
+            if (model.ActiveGame != "all")
+                query = query.Where(c => c.Game.GameID.ToLower() == model.ActiveGame.ToLower());
+            if (model.ActiveSportType != "all")
+                query = query.Where(c => c.Sport.SportID.ToLower() == model.ActiveSportType.ToLower());
 
             // pass countries to view as model
             model.CountryList = query.ToList();
             return View(model);
         }
+        //public ViewResult Index(string activeGame = "all", string activeSportType = "all")
+        //{
+        //    var session = new OlympicSession(HttpContext.Session);
+        //    session.SetActiveGame(activeGame);
+        //    session.SetActiveSport(activeSportType);
+
+        //    // if no count in session, get cookie and restore fave teams in session
+        //    int? count = session.GetMyCountryCount();
+        //    if (count == null)
+        //    {
+        //        var cookies = new OlympicCookies(Request.Cookies);
+        //        string[] ids = cookies.GetMyCountryIds();
+        //        List<Country> mycountries = new List<Country>();
+        //        if (ids.Length > 0)
+        //        {
+        //            mycountries = context.Countries.Include(c => c.Game)
+        //            .Include(c => c.Sport)
+        //            .Where(t => ids.Contains(t.CountryID)).ToList();
+        //        }
+        //        session.SetMyCountries(mycountries);
+        //    }
+
+        //    var model = new CountryListViewModel
+        //    {
+        //        ActiveGame = activeGame,
+        //        ActiveSportType = activeSportType,
+        //        Games = context.Games.ToList(),
+        //        Sports = context.Sports.ToList()
+        //    };
+
+        //    IQueryable<Country> query = context.Countries;
+        //    if (activeGame != "all")
+        //        query = query.Where(c => c.Game.GameID.ToLower() == activeGame.ToLower());
+        //    if (activeSportType != "all")
+        //        query = query.Where(c => c.Sport.SportID.ToLower() == activeSportType.ToLower());
+
+        //    // pass countries to view as model
+        //    model.CountryList = query.ToList();
+        //    return View(model);
+        //}
         [HttpPost]
         public RedirectToActionResult Details(CountryViewModel model)
         {
@@ -84,11 +120,14 @@ namespace OlympicsWebsite.Controllers
             .Include(c => c.Sport)
             .Where(c => c.CountryID == model.Country.CountryID)
             .FirstOrDefault();
+
             var session = new OlympicSession(HttpContext.Session);
             var countries = session.GetMyCountries();
             countries.Add(model.Country);
             session.SetMyCountries(countries);
+
             TempData["message"] = $"{model.Country.Name} added to your favorites";
+
             return RedirectToAction("Index",
             new
             {
