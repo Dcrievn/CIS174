@@ -135,3 +135,4 @@ C:\Users\Damer\source\repos\CIS 174 Advanced C# assignments\ToDoListApplication\
 C:\Users\Damer\source\repos\CIS 174 Advanced C# assignments\ToDoListApplication\obj\Debug\net8.0\ToDoListApplication.pdb
 C:\Users\Damer\source\repos\CIS 174 Advanced C# assignments\ToDoListApplication\obj\Debug\net8.0\ToDoListApplication.genruntimeconfig.cache
 C:\Users\Damer\source\repos\CIS 174 Advanced C# assignments\ToDoListApplication\obj\Debug\net8.0\ref\ToDoListApplication.dll
+C:\Users\Damer\source\repos\CIS 174 Advanced C# assignments\ToDoListApplication\bin\Debug\net8.0\libman.json
